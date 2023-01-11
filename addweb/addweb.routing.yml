@@ -1,0 +1,7 @@
+addweb.form:
+  path: '/admin/config/user-interface/add-web'
+  defaults:
+    _form: '\Drupal\addweb\Form\AddWebForm'
+    _title: 'Add Web Task'
+  requirements:
+    _permission: 'administer site configuration'

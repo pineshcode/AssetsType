@@ -1,0 +1,9 @@
+addweb:
+  version: 1.x
+  css:
+    theme:
+      css/addweb.css: {}
+  js:
+    js/addweb.js: {}
+  dependencies:
+    - core/jquery

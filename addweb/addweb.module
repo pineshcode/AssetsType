@@ -1,0 +1,52 @@
+<?php
+
+/**
+ * @file
+ * Functions for the addweb module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Render\Markup;
+
+/**
+ * Implementation of addweb_help().
+ */
+function addweb_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.addweb':
+      $output = '<p>' . t('This module places custom CSS and JS') . '</p>';
+      $output .= '<h3>' . t('How to use the plugin') . '</h3>';
+      $output .= '<h4>' . t('Choose <em>AddWeb</em> in the <em>Style</em> dialog within your view, which will prompt you to configure the settings.') . '</h4>';
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function addweb_preprocess_page(&$variables) {
+  $config = \Drupal::config('addweb.settings');
+  $theme_selected = $config->get('addwebThemename');
+  $active_theme = \Drupal::service('theme.manager')->getActiveTheme()->getName();
+  if (array_keys($theme_selected, $active_theme)) {
+    $variables['#attached']['library'][] = 'addweb/addweb';
+    // assets get setting values.
+    $variables['#attached']['drupalSettings']['assetsType'] = $config->get('assetsType');
+    $variables['#attached']['drupalSettings']['assetsPaths'] = $config->get('assetsPaths');
+  }
+}
+function addweb_page_attachments(&$attachments) {
+  $config = \Drupal::config('addweb.settings');
+  $assetsType = $config->get('assetsType');
+  $assetsPaths = $config->get('assetsPaths');
+  if ($assetsType == 'custom') {
+    $attachments['#attached']['html_head'][] = [
+      [
+        '#tag' => 'script',
+        '#value' => Markup::create($assetsPaths),
+        '#weight' => -1,
+      ],
+      'ad_script',
+    ];
+  }
+}
