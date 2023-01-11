@@ -1,0 +1,10 @@
+name: Add Web
+description: 'AddWeb Task module.'
+# core: 8.x
+type: module
+package: Core
+# version: VERSION
+# core: 8.x
+configure: addweb.form
+core: '8.x'
+core_version_requirement: ^8 || ^9 || ^10
