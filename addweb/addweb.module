@@ -35,6 +35,10 @@ function addweb_preprocess_page(&$variables) {
     $variables['#attached']['drupalSettings']['assetsPaths'] = $config->get('assetsPaths');
   }
 }
+
+/**
+ * Implements hook_page_attachments().
+ */
 function addweb_page_attachments(&$attachments) {
   $config = \Drupal::config('addweb.settings');
   $assetsType = $config->get('assetsType');
