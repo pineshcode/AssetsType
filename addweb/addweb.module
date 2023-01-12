@@ -14,9 +14,7 @@ use Drupal\Core\Render\Markup;
 function addweb_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
     case 'help.page.addweb':
-      $output = '<p>' . t('This module places custom CSS and JS') . '</p>';
-      $output .= '<h3>' . t('How to use the plugin') . '</h3>';
-      $output .= '<h4>' . t('Choose <em>AddWeb</em> in the <em>Style</em> dialog within your view, which will prompt you to configure the settings.') . '</h4>';
+      $output = '<p>' . t('This module places custom CSS and JS CDN') . '</p>';
       return $output;
   }
 }
@@ -26,14 +24,12 @@ function addweb_help($route_name, RouteMatchInterface $route_match) {
  */
 function addweb_preprocess_page(&$variables) {
   $config = \Drupal::config('addweb.settings');
-  $theme_selected = $config->get('addwebThemename');
-  $active_theme = \Drupal::service('theme.manager')->getActiveTheme()->getName();
-  if (array_keys($theme_selected, $active_theme)) {
-    $variables['#attached']['library'][] = 'addweb/addweb';
     // assets get setting values.
     $variables['#attached']['drupalSettings']['assetsType'] = $config->get('assetsType');
     $variables['#attached']['drupalSettings']['assetsPaths'] = $config->get('assetsPaths');
-  }
+    if ($variables['#attached']['drupalSettings']['assetsType'] == 'default') {
+      $variables['#attached']['library'][] = 'addweb/addweb';
+    }
 }
 
 /**
@@ -43,14 +39,26 @@ function addweb_page_attachments(&$attachments) {
   $config = \Drupal::config('addweb.settings');
   $assetsType = $config->get('assetsType');
   $assetsPaths = $config->get('assetsPaths');
+  $assetsPathsJs = explode(',', $assetsPaths);
+
   if ($assetsType == 'custom') {
-    $attachments['#attached']['html_head'][] = [
-      [
-        '#tag' => 'script',
-        '#value' => Markup::create($assetsPaths),
-        '#weight' => -1,
-      ],
-      'ad_script',
-    ];
+    foreach ($assetsPathsJs as $key => $value) {
+        if(strpos($value, '.js') !== false) {
+          $assetsArray = [
+            '#tag' => 'script',
+            '#attributes' => ['type' => 'text/javascript', 'src' => $value],
+            '#weight' => 1,
+            'addweb_script',
+          ];
+        } 
+        if(strpos($value, '.css') !== false) {
+          $assetsArray = [
+            '#tag' => 'style',
+            '#attributes' => ['rel' => 'stylesheet', 'herf' => $value],
+            '#weight' => 1,
+          ];
+        }
+        $attachments['#attached']['html_head'][] = [$assetsArray, $key];
+    }
   }
 }
