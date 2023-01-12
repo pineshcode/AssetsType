@@ -47,7 +47,7 @@ class AddWebForm extends ConfigFormBase {
     $form['assets_paths'] = [
       '#type' => 'textarea',
       '#size' => '60',
-      '#placeholder' => 'Enter CSS and JS',
+      '#placeholder' => 'Enter CSS and JS CDN Paths with comma separated',
       '#attributes' => [
         'id' => 'assets-custom',
       ],
