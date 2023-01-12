@@ -41,7 +41,7 @@ CONFIGURATION
    By default, value default.
 2. To add Custom CSS and JS, Configuration select 
    the user-interface > add-web
-   Change and Save configuration.
+   Change default to custom and add CDN js, CSS file using comma-separated Save configuration.
 
 
 MAINTAINERS
