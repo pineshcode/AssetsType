@@ -36,7 +36,7 @@ module. Visit https://www.drupal.org/node/895232 for further information.
 CONFIGURATION
 -------------
 
-1. The user can set which button is used as the showing via
+1. The user can set which JS,CSS CDN is used as the showing via
    Administration > Configuration > user-interface > add-web.
    By default, value default.
 2. To add Custom CSS and JS, Configuration select 
